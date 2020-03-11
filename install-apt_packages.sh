@@ -10,7 +10,7 @@ echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 # Add some basics
 apt-get update
 apt-get install -y -qq --no-install-recommends \
-	wget curl \
+	ca-certificates wget curl \
 	python-crcmod locales \
 	dirmngr \
 	pigz zstd
