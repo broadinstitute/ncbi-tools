@@ -1,3 +1,5 @@
-entrez-direct
-jq
-sra-tools
+entrez-direct=13.3
+jq=1.6
+sra-tools=2.10.3
+samtools=1.9
+picard-slim=2.21.1
