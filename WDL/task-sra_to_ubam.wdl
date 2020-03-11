@@ -4,7 +4,7 @@ task Fetch_SRA_to_BAM {
 
     input {
         String  SRA_ID
-        String  docker = "quay.io/dpark01/ncbi-tools"
+        String  docker = "quay.io/broadinstitute/ncbi-tools"
     }
 
     command {
