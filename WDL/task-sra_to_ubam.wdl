@@ -19,7 +19,7 @@ task Fetch_SRA_to_BAM {
         MODEL=`cat ${SRA_ID}.json | jq -r .EXPERIMENT_PACKAGE_SET.EXPERIMENT_PACKAGE.EXPERIMENT.PLATFORM.$PLATFORM.INSTRUMENT_MODEL`
         SAMPLE=`cat ${SRA_ID}.json | jq -r '.EXPERIMENT_PACKAGE_SET.EXPERIMENT_PACKAGE.SAMPLE.IDENTIFIERS.EXTERNAL_ID|select(.namespace == "BioSample")|.content'`
         LIBRARY=`cat ${SRA_ID}.json | jq -r '.EXPERIMENT_PACKAGE_SET.EXPERIMENT_PACKAGE.EXPERIMENT.DESIGN.LIBRARY_DESCRIPTOR.LIBRARY_NAME'`
-        RUNDATE=`cat ${SRA_ID}.json | jq -r '.EXPERIMENT_PACKAGE_SET.EXPERIMENT_PACKAGE.RUN_SET.RUN.SRAFiles.SRAFile[]|select(.supertype == "Original")|.date'`
+        RUNDATE=`cat ${SRA_ID}.json | jq -r '.EXPERIMENT_PACKAGE_SET.EXPERIMENT_PACKAGE.RUN_SET.RUN.SRAFiles.SRAFile[]|select(.supertype == "Original")|.date' | cut -f 1 -d ' '`
         
         sam-dump --unaligned --header ${SRA_ID} \
             | samtools view -bhS - \
@@ -28,13 +28,14 @@ task Fetch_SRA_to_BAM {
         picard AddOrReplaceReadGroups \
             I=temp.bam \
             O=${SRA_ID}.bam \
+            RGID=1 \
             RGLB="$LIBRARY" \
             RGSM="$SAMPLE" \
             RGPL="$PLATFORM" \
             RGPU="$LIBRARY" \
             RGPM="$MODEL" \
             RGDT="$RUNDATE" \
-            VALIDATION_STRINGENCY=LENIENT \
+            VALIDATION_STRINGENCY=SILENT \
             USE_JDK_DEFLATER=true \
             USE_JDK_INFLATER=true
     }
