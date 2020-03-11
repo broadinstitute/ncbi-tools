@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ex -o pipefail
+set -e -o pipefail
 
 if [ $# -lt 2 ]; then
     echo "This script fetches reads from SRA as a BAM file with properly formatted read groups"
