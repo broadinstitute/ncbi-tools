@@ -1,0 +1,3 @@
+entrez-direct
+jq
+sra-tools

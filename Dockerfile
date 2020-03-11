@@ -18,8 +18,9 @@ RUN conda create -n $CONDA_DEFAULT_ENV python=3.6
 RUN echo "source activate $CONDA_DEFAULT_ENV" > ~/.bashrc
 RUN hash -r
 
-# install NCBI Entrez tools, SRA Toolkit, and jq (json parser)
-RUN conda install entrez-direct jq sra-tools
+# install specific tools
+COPY requirements-conda.txt /opt/docker
+RUN conda install -y --quiet --file /opt/docker/requirements-conda.txt
 
 # set up entrypoint
 CMD ["/bin/bash"]
