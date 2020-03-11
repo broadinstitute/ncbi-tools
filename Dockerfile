@@ -18,8 +18,8 @@ RUN conda create -n $CONDA_DEFAULT_ENV python=3.6
 RUN echo "source activate $CONDA_DEFAULT_ENV" > ~/.bashrc
 RUN hash -r
 
-# install NCBI Entrez tools and jq (json parser)
-RUN conda install entrez-direct jq
+# install NCBI Entrez tools, SRA Toolkit, and jq (json parser)
+RUN conda install entrez-direct jq sra-tools
 
 # set up entrypoint
 CMD ["/bin/bash"]
