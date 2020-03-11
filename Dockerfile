@@ -16,7 +16,7 @@ RUN /opt/docker/install-miniconda.sh
 ENV PATH="$MINICONDA_PATH/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 RUN conda create -n $CONDA_DEFAULT_ENV python=3.6
 # force this to run in bash since we're initializing for bash
-RUN /bin/bash -c "set -e; conda init bash"
+RUN /bin/bash -c "set -e; conda init bash ; conda activate $CONDA_DEFAULT_ENV"
 # append the conda activate command to the ~/.bashrc file because 
 # 'conda init bash' writes to ~/.bashrc
 RUN echo "conda activate $CONDA_DEFAULT_ENV" >> ~/.bashrc
