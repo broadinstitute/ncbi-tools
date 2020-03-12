@@ -17,7 +17,7 @@ task Fetch_SRA_to_BAM {
         esearch -db sra -q "${SRA_ID}" | efetch -mode json -json > ${SRA_ID}.json
 
         cat ${SRA_ID}.json | jq -r \
-            '.EXPERIMENT_PACKAGE_SET.EXPERIMENT_PACKAGE.SUBMISSION.center_name' \
+            .EXPERIMENT_PACKAGE_SET.EXPERIMENT_PACKAGE.SUBMISSION.center_name \
             | tee OUT_CENTER
         cat ${SRA_ID}.json | jq -r \
             '.EXPERIMENT_PACKAGE_SET.EXPERIMENT_PACKAGE.EXPERIMENT.PLATFORM | keys[] as $k | "\($k)"' \
@@ -32,8 +32,8 @@ task Fetch_SRA_to_BAM {
             .EXPERIMENT_PACKAGE_SET.EXPERIMENT_PACKAGE.EXPERIMENT.DESIGN.LIBRARY_DESCRIPTOR.LIBRARY_NAME \
             | tee OUT_LIBRARY
         cat ${SRA_ID}.json | jq -r \
-            '.EXPERIMENT_PACKAGE_SET.EXPERIMENT_PACKAGE.RUN_SET.RUN.SRAFiles.SRAFile[]|select(.supertype == "Original")|.date' \
-            | head -1 | cut -f 1 -d ' ' \
+            '.EXPERIMENT_PACKAGE_SET.EXPERIMENT_PACKAGE.RUN_SET.RUN.SRAFiles|if (.SRAFile|type) == "object" then .SRAFile.date else [.SRAFile[]|select(.supertype == "Original")][0].date end' \
+            | cut -f 1 -d ' ' \
             | tee OUT_RUNDATE
         cat ${SRA_ID}.json | jq -r \
             '.EXPERIMENT_PACKAGE_SET.EXPERIMENT_PACKAGE.SAMPLE.SAMPLE_ATTRIBUTES.SAMPLE_ATTRIBUTE[]|select(.TAG == "collection_date")|.VALUE' \
