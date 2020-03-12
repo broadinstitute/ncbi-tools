@@ -22,6 +22,7 @@ task Fetch_SRA_to_BAM {
         cat ${SRA_ID}.json | jq -r \
             '.EXPERIMENT_PACKAGE_SET.EXPERIMENT_PACKAGE.EXPERIMENT.PLATFORM | keys[] as $k | "\($k)"' \
             | tee OUT_PLATFORM
+        PLATFORM=`cat OUT_PLATFORM`
         cat ${SRA_ID}.json | jq -r \
             .EXPERIMENT_PACKAGE_SET.EXPERIMENT_PACKAGE.EXPERIMENT.PLATFORM.$PLATFORM.INSTRUMENT_MODEL \
             | tee OUT_MODEL
