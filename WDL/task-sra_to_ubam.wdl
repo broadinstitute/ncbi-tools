@@ -61,7 +61,7 @@ task Fetch_SRA_to_BAM {
         String  sample_collected_by = read_string("OUT_COLLECTED_BY")
         String  sample_strain = read_string("OUT_STRAIN")
         String  sample_geo_loc = read_string("OUT_GEO_LOC")
-        File    sra_metadata = "${SRA_ID.json"
+        File    sra_metadata = "${SRA_ID}.json"
     }
 
     runtime {
