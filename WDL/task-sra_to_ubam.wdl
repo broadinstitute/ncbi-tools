@@ -33,7 +33,7 @@ task Fetch_SRA_to_BAM {
             | tee OUT_LIBRARY
         cat ${SRA_ID}.json | jq -r \
             '.EXPERIMENT_PACKAGE_SET.EXPERIMENT_PACKAGE.RUN_SET.RUN.SRAFiles.SRAFile[]|select(.supertype == "Original")|.date' \
-            | cut -f 1 -d ' ' \
+            | head -1 | cut -f 1 -d ' ' \
             | tee OUT_RUNDATE
         cat ${SRA_ID}.json | jq -r \
             '.EXPERIMENT_PACKAGE_SET.EXPERIMENT_PACKAGE.SAMPLE.SAMPLE_ATTRIBUTES.SAMPLE_ATTRIBUTE[]|select(.TAG == "collection_date")|.VALUE' \
