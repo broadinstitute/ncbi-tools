@@ -21,13 +21,13 @@ mkdir -p ${output_dir}
 
 # get RefSeq
 # accession:
-REFSEQ_ACCESSIONS=$(esearch -db nuccore -query "txid${ncbi_taxid}[Organism:noexp] AND srcdb_refseq[PROP] AND (\"${seq_minlen}\"[SLEN] : \"${seq_maxlen}\"[SLEN])" | efetch -format acc | tr '\n' ' ')
+REFSEQ_ACCESSIONS=$(esearch -db nuccore -query "txid${ncbi_taxid}[Organism:noexp] AND srcdb_refseq[PROP] AND (\"${seq_minlen}\"[SLEN] : \"${seq_maxlen}\"[SLEN])" | efetch -format acc | tee "${output_dir}/refseq_for_txid${ncbi_taxid}.seq" | tr '\n' ' ')
 # fasta:
-esearch -db nuccore -query "txid${ncbi_taxid}[Organism:noexp] AND srcdb_refseq[PROP] AND (\"${seq_minlen}\"[SLEN] : \"${seq_maxlen}\"[SLEN])" | efetch -format fasta > "${output_dir}/refseq_for_txid${ncbi_taxid}__$(echo ${REFSEQ_ACCESSIONS} | tr ' ' '_').fasta"
+esearch -db nuccore -query "txid${ncbi_taxid}[Organism:noexp] AND srcdb_refseq[PROP] AND (\"${seq_minlen}\"[SLEN] : \"${seq_maxlen}\"[SLEN])" | efetch -format fasta > "${output_dir}/refseq_for_txid${ncbi_taxid}__$(echo ${REFSEQ_ACCESSIONS} | tr ' ' '__').fasta"
 
 # get all entries
 # accessions:
-#esearch -db nuccore -query "txid${ncbi_taxid}[Organism:noexp] AND (\"${seq_minlen}\"[SLEN] : \"${seq_maxlen}\"[SLEN])" | efetch -format acc | tr '\n' ' '
+esearch -db nuccore -query "txid${ncbi_taxid}[Organism:noexp] AND (\"${seq_minlen}\"[SLEN] : \"${seq_maxlen}\"[SLEN])" | efetch -format acc > "${output_dir}/all_seq_for_txid${ncbi_taxid}_on_genbank_as_of_$(date '+%Y-%m-%d-%H%M').seq"
 # fastas:
 esearch -db nuccore -query "txid${ncbi_taxid}[Organism:noexp] AND (\"${seq_minlen}\"[SLEN] : \"${seq_maxlen}\"[SLEN])" | efetch -format fasta > "${output_dir}/all_seq_for_txid${ncbi_taxid}_on_genbank_as_of_$(date '+%Y-%m-%d-%H%M').fasta"
 
