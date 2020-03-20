@@ -24,22 +24,22 @@ mkdir -p ${output_dir}
 
 # get RefSeq
 # accession:
-esearch -db nuccore -query "txid${ncbi_taxid}[Organism:noexp] AND srcdb_refseq[PROP] AND (\"${seq_minlen}\"[SLEN] : \"${seq_maxlen}\"[SLEN])" | efetch -format acc > "${output_dir}/refseq_for_txid${ncbi_taxid}.seq"
+esearch -db nuccore -query "txid${ncbi_taxid}[Organism:noexp] AND srcdb_refseq[PROP] AND (\"${seq_minlen}\"[SLEN] : \"${seq_maxlen}\"[SLEN])" | efetch -format acc > "${output_dir}/ncbi_refseq_for_txid${ncbi_taxid}.seq"
 # fasta:
-efetch -db nuccore -format fasta -id $(cat "${output_dir}/refseq_for_txid${ncbi_taxid}.seq" | tr '\n' ',') > "${output_dir}/refseq_for_txid${ncbi_taxid}.fasta"
+efetch -db nuccore -format fasta -id $(cat "${output_dir}/ncbi_refseq_for_txid${ncbi_taxid}.seq" | tr '\n' ',') > "${output_dir}/ncbi_refseq_for_txid${ncbi_taxid}.fasta"
 
 # get accessions for representative assemblies (comparable to searching NCBI Genome)
 # if no such representative sequences have been designated, touch the output
-REPRESENTATIVE_GENOME_ACCESSIONS=$(esearch -db assembly -query "txid${ncbi_taxid}[Organism:noexp]" | efilter -query "representative[PROP]" | elink -target nuccore -name assembly_nuccore_refseq | efetch -format docsum | xtract -pattern DocumentSummary -element AccessionVersion Slen Title | sed 's/,.*//' | grep -v -i -e scaffold -e contig -e plasmid -e sequence -e patch | sort -t $'\t' -k 2,2nr | cut -f1 | tee "${output_dir}/ncbi_representative_genome_for_txid${ncbi_taxid}.seq" | tr '\n' ',')
+REPRESENTATIVE_GENOME_ACCESSIONS=$(esearch -db assembly -query "txid${ncbi_taxid}[Organism:noexp]" | efilter -query "representative[PROP]" | elink -target nuccore -name assembly_nuccore_refseq | efetch -format docsum | xtract -pattern DocumentSummary -element AccessionVersion Slen Title | sed 's/,.*//' | grep -v -i -e scaffold -e contig -e plasmid -e sequence -e patch | sort -t $'\t' -k 2,2nr | cut -f1 | tee "${output_dir}/ncbi_representative_genome_assemblies_for_txid${ncbi_taxid}.seq" | tr '\n' ',')
 if [ ! -z "${REPRESENTATIVE_GENOME_ACCESSIONS}" ]; then
     echo "REPRESENTATIVE_GENOME_ACCESSIONS: ${REPRESENTATIVE_GENOME_ACCESSIONS}"
-    efetch -db nuccore -format fasta -id "${REPRESENTATIVE_GENOME_ACCESSIONS}" > "${output_dir}/ncbi_representative_genome_for_txid${ncbi_taxid}.fasta"
+    efetch -db nuccore -format fasta -id "${REPRESENTATIVE_GENOME_ACCESSIONS}" > "${output_dir}/ncbi_representative_genome_assemblies_for_txid${ncbi_taxid}.fasta"
 else
-    touch "${output_dir}/ncbi_representative_genome_for_txid${ncbi_taxid}.fasta"
+    touch "${output_dir}/ncbi_representative_genome_assemblies_for_txid${ncbi_taxid}.fasta"
 fi
 
 # get all entries from GenBank
 #accessions:
-esearch -db nuccore -query "txid${ncbi_taxid}[Organism:noexp] AND (\"${seq_minlen}\"[SLEN] : \"${seq_maxlen}\"[SLEN])" | efetch -stop "${return_count_limit}" -format acc > "${output_dir}/all_genbank_seq_for_txid${ncbi_taxid}_on_genbank_as_of_${script_start_date}.seq"
+esearch -db nuccore -query "txid${ncbi_taxid}[Organism:noexp] AND (\"${seq_minlen}\"[SLEN] : \"${seq_maxlen}\"[SLEN])" | efetch -stop "${return_count_limit}" -format acc > "${output_dir}/ncbi_all_genbank_seq_for_txid${ncbi_taxid}_as_of_${script_start_date}.seq"
 #fastas:
-efetch -db nuccore -format fasta -id $(cat "${output_dir}/all_genbank_seq_for_txid${ncbi_taxid}_on_genbank_as_of_${script_start_date}.seq" | tr '\n' ',') > "${output_dir}/all_genbank_seq_for_txid${ncbi_taxid}_on_genbank_as_of_${script_start_date}.fasta"
+efetch -db nuccore -format fasta -id $(cat "${output_dir}/ncbi_all_genbank_seq_for_txid${ncbi_taxid}_as_of_${script_start_date}.seq" | tr '\n' ',') > "${output_dir}/ncbi_all_genbank_seq_for_txid${ncbi_taxid}_as_of_${script_start_date}.fasta"
