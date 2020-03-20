@@ -23,7 +23,7 @@ mkdir -p ${output_dir}
 # accession:
 REFSEQ_ACCESSIONS=$(esearch -db nuccore -query "txid${ncbi_taxid}[Organism:noexp] AND srcdb_refseq[PROP] AND (\"${seq_minlen}\"[SLEN] : \"${seq_maxlen}\"[SLEN])" | efetch -format acc | tee "${output_dir}/refseq_for_txid${ncbi_taxid}.seq" | tr '\n' ' ')
 # fasta:
-esearch -db nuccore -query "txid${ncbi_taxid}[Organism:noexp] AND srcdb_refseq[PROP] AND (\"${seq_minlen}\"[SLEN] : \"${seq_maxlen}\"[SLEN])" | efetch -format fasta > "${output_dir}/refseq_for_txid${ncbi_taxid}__$(echo ${REFSEQ_ACCESSIONS} | tr ' ' '__').fasta"
+esearch -db nuccore -query "txid${ncbi_taxid}[Organism:noexp] AND srcdb_refseq[PROP] AND (\"${seq_minlen}\"[SLEN] : \"${seq_maxlen}\"[SLEN])" | efetch -format fasta > "${output_dir}/refseq_for_txid${ncbi_taxid}.fasta"
 
 # get all entries
 # accessions:
