@@ -35,6 +35,5 @@ picard AddOrReplaceReadGroups \
     RGPU="$LIBRARY" \
     RGPM="$MODEL" \
     RGDT="$RUNDATE" \
-    VALIDATION_STRINGENCY=SILENT \
-    USE_JDK_DEFLATER=true \
-    USE_JDK_INFLATER=true
+    RGCN="$CENTER" \
+    VALIDATION_STRINGENCY=SILENT
