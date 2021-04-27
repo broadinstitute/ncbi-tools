@@ -23,7 +23,12 @@ def biosample_lookup(accessions):
     biosamples = json.loads(js_result)
 
     # clean up / reorg structure
-    biosamples = list(biosamples['BioSampleSet']['BioSample'].values())
+    if 'last_update' in biosamples['BioSampleSet']['BioSample']:
+        # response is one entry
+        biosamples = [biosamples['BioSampleSet']['BioSample']]
+    else:
+        # response is multiple entries
+        biosamples = list(biosamples['BioSampleSet']['BioSample'].values())
     biosamples = list(
         dict(
             [(attribute.get('harmonized_name', attribute['attribute_name']), attribute['content'])
@@ -81,7 +86,9 @@ def main(args):
     with open(args.out_basename+'.json', 'wt') as outf:
         json.dump(biosamples, outf)
     with open(args.out_basename+'.tsv', 'wt') as outf:
-        writer = csv.DictWriter(outf, keys, delimiter='\t', dialect=csv.unix_dialect, quoting=csv.QUOTE_MINIMAL)
+        writer = csv.DictWriter(outf, keys,
+            extrasaction='ignore',
+            delimiter='\t', dialect=csv.unix_dialect, quoting=csv.QUOTE_MINIMAL)
         writer.writeheader()
         writer.writerows(biosamples)
 
