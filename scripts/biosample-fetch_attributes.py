@@ -44,7 +44,7 @@ def biosample_lookup(accessions):
         # clear missing values
         for k,v in bs.items():
             if v == 'not provided':
-                del bs[k]
+                bs[k] = ''
         # prefer isolate name over sample_name
         if bs.get('isolate'):
             bs['sample_name'] = bs['isolate']
