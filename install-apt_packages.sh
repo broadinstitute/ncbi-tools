@@ -2,6 +2,9 @@
 
 set -e -o pipefail
 
+# add source for node.js 14
+curl -sL https://deb.nodesource.com/setup_14.x | bash -
+
 # Add some basics
 apt-get update
 apt-get install -y -qq --no-install-recommends \
