@@ -26,6 +26,9 @@ RUN hash -r
 COPY requirements-conda.txt /opt/docker
 RUN /bin/bash -c "set -e; sync; conda install -y --quiet --file /opt/docker/requirements-conda.txt ; conda clean -y --all"
 
+# install tsv converter
+RUN /opt/docker/install-tsv_converter.sh
+
 # install scripts
 COPY scripts/* /opt/docker/scripts/
 
