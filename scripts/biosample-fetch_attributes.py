@@ -13,7 +13,7 @@ def biosample_lookup(accessions):
 
     # get list of primary db IDs
     primary_ids = Bio.Entrez.read(Bio.Entrez.esearch('biosample',
-        '|'.join(accessions)))['IdList']
+        '|'.join(f'"{a}"' for a in accessions)))['IdList']
 
     # fetch biosample entries
     # unfortunately Bio.Entrez.efetch doesn't work for BioSample, so call out
