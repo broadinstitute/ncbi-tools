@@ -4,7 +4,7 @@ set -e
 apt-get update
 
 apt-get install -y -qq --no-install-recommends \
-	ca-certificates locales dirmngr apt-utils \
+	ca-certificates locales locales-all dirmngr apt-utils \
 	less nano vim git wget curl jq parallel \
 	pigz zstd \
 	python3 python3-pip python3-crcmod
