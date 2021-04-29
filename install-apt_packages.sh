@@ -1,22 +1,14 @@
 #!/bin/bash
+set -e
 
-set -e -o pipefail
-
-# Silence some warnings about Readline. Checkout more over her
-# https://github.com/phusion/baseimage-docker/issues/58
-DEBIAN_FRONTEND=noninteractive
-echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
-
-# Add some basics
 apt-get update
-apt-get install -y -qq --no-install-recommends \
-	ca-certificates wget curl \
-	python-crcmod locales \
-	dirmngr \
-	pigz zstd
 
-# Upgrade and clean
-apt-get upgrade -y
+apt-get install -y -qq --no-install-recommends \
+	ca-certificates locales dirmngr apt-utils \
+	less nano vim git wget curl jq parallel \
+	pigz zstd \
+	python3 python3-pip python3-crcmod
+
 apt-get clean
 
 locale-gen en_US.UTF-8
