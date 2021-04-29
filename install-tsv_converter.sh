@@ -11,4 +11,5 @@ tar -xf "$REPO_COMMIT.tar.gz" -C /opt/converter --strip-components=1
 cd /opt/converter
 mkdir -p logs staging
 npm install
+rm -f files/sample.tsv reports/sample-report.xml
 cd -
