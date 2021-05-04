@@ -2,7 +2,7 @@
 
 set -e -o pipefail
 
-REPO_COMMIT=54cfb5ab7182b9d7b399bca62f83490f0f32cddf
+REPO_COMMIT=c226ebd14ff52e49538228e66b045df483360f1a
 
 wget -q "https://github.com/Asymmetrik/broad-tsv-converter/archive/$REPO_COMMIT.tar.gz"
 mkdir -p /opt/converter
