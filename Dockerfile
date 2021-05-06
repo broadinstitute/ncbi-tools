@@ -27,6 +27,7 @@ COPY requirements-conda.txt /opt/docker
 RUN /bin/bash -c "set -e; sync; conda install -y --quiet --file /opt/docker/requirements-conda.txt ; conda clean -y --all"
 
 # install tsv converter
+ENV ASYMMETRIK_REPO_COMMIT=0ae697cb6ff12c75bc2fc8c4c5c809020c266fab
 RUN /opt/docker/install-tsv_converter.sh
 
 # install scripts
