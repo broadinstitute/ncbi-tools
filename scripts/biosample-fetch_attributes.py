@@ -15,6 +15,9 @@ def biosample_lookup(accessions, max_results=10000):
     primary_ids = Bio.Entrez.read(Bio.Entrez.esearch('biosample',
         '|'.join(f'"{a}"' for a in accessions), retmax=max_results))['IdList']
 
+    if not primary_ids:
+        return list()
+
     # fetch biosample entries
     # unfortunately Bio.Entrez.efetch doesn't work for BioSample, so call out
     js_result = subprocess.check_output(['efetch',
