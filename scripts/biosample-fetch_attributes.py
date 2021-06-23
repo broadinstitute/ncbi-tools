@@ -53,11 +53,11 @@ def biosample_lookup(accessions, max_results=10000):
         for k,v in bs.items():
             if v == 'not provided':
                 bs[k] = ''
-        # prefer isolate name over sample_name
-        if bs.get('isolate'):
-            bs['sample_name'] = bs['isolate']
-        else:
-            bs['isolate'] = bs.get('sample_name','')
+        ## prefer isolate name over sample_name
+        #if bs.get('isolate'):
+        #    bs['sample_name'] = bs['isolate']
+        #else:
+        #    bs['isolate'] = bs.get('sample_name','')
         # British to American conversions (NCBI vs ENA)
         for key_us, key_uk in us_to_uk.items():
             if not bs.get(key_us,''):
