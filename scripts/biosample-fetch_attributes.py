@@ -9,11 +9,11 @@ import Bio.Entrez
 import subprocess
 
 
-def biosample_lookup(accessions):
+def biosample_lookup(accessions, max_results=10000):
 
     # get list of primary db IDs
     primary_ids = Bio.Entrez.read(Bio.Entrez.esearch('biosample',
-        '|'.join(f'"{a}"' for a in accessions)))['IdList']
+        '|'.join(f'"{a}"' for a in accessions), retmax=max_results))['IdList']
 
     # fetch biosample entries
     # unfortunately Bio.Entrez.efetch doesn't work for BioSample, so call out
@@ -65,7 +65,7 @@ def biosample_lookup(accessions):
 def main(args):
 
     # fetch biosample info
-    biosamples = biosample_lookup(args.accessions)
+    biosamples = biosample_lookup(args.accessions, max_results=args.max_results)
 
     # get full list of headers/keys and harmonize across all entries
     _required_keys = ('accession', 'message', 'sample_name', 'isolate',
@@ -97,5 +97,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Retrieve NCBI BioSample metadata')
     parser.add_argument('accessions', nargs='+', help='BioSample accession list')
     parser.add_argument('out_basename', help='output basename for tsv and json output files')
+    parser.add_argument('--max_results', type=int, default=10000, help='max results per query (no more than 100000). default: %(default)s')
     args = parser.parse_args()
     main(args)
