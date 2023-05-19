@@ -34,13 +34,21 @@ def biosample_lookup(accessions, max_results=10000):
         biosamples = list(biosamples['BioSampleSet']['BioSample'].values())
     biosamples = list(
         dict(
+            # biosample attributes
             [(attribute.get('harmonized_name', attribute['attribute_name']), attribute['content'])
             for attribute in bs['Attributes']['Attribute']]
+            # links to other databases, collapsed to lists of IDs per link target. At a minimum a biosample should belong to a bioproject
+            + [(link["target"], [l2['label'] for l2 in bs['Links']['Link'] if l2["target"]==link["target"]])
+            for link in bs['Links']['Link'] if type(bs['Links']['Link'])==list]
+            # if there's only one external db link, the value presents as a dict, so access the values accordingly
+            + [(bs['Links']['Link']['target'], bs['Links']['Link']['label']) if type(bs['Links']['Link'])==dict else None]
+            # append various other IDs for this sample (ex. SRA accession)
+            # ToDo: determine if the IDs are ever not unique by db type, and collapse to list if so
+            + [(sample_id["db"],sample_id["content"]) if "db" in sample_id else (sample_id["db_label"],sample_id["content"]) if "db_label" in sample_id else None for sample_id in bs['Ids']["Id"] ]
             + [
                 ('accession', bs['accession']),
                 ('message', 'Successfully loaded'),
                 ('organism', bs['Description']['Organism']['OrganismName']),
-                ('bioproject_accession', ''),  ##### is this not possible?
             ]
         )
         for bs in biosamples
