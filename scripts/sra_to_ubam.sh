@@ -23,10 +23,10 @@ RUNDATE=`cat ${SRA_ID}.json | jq -r '.EXPERIMENT_PACKAGE_SET.EXPERIMENT_PACKAGE.
 
 sam-dump --unaligned --header ${SRA_ID} \
     | samtools view -bhS - \
-    > temp.bam
+    > ${SRA_ID}.temp.bam
 
 picard AddOrReplaceReadGroups \
-    I=temp.bam \
+    I=${SRA_ID}.temp.bam \
     O="$OUTFILE" \
     RGID=1 \
     RGLB="$LIBRARY" \
