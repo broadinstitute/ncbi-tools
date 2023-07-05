@@ -19,7 +19,7 @@ ENV MINICONDA_PATH="/opt/miniconda" CONDA_DEFAULT_ENV="default"
 RUN /opt/docker/install-miniconda.sh
 ENV PATH="$MINICONDA_PATH/envs/$CONDA_DEFAULT_ENV/bin:$MINICONDA_PATH/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 RUN conda install mamba
-RUN conda create -n $CONDA_DEFAULT_ENV python=3.7
+RUN conda create -n $CONDA_DEFAULT_ENV python=3.8
 RUN echo "source activate $CONDA_DEFAULT_ENV" >> ~/.bashrc
 RUN hash -r
 
