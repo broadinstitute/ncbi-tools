@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e -o pipefail
 
-MINICONDA_VERSION="4.6.14"
-MINICONDA_URL="https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh"
+MINICONDA_VERSION="23.3.1"
+MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-py38_${MINICONDA_VERSION}-0-Linux-x86_64.sh"
 
 # download and run miniconda installer script
 curl -sSL $MINICONDA_URL > "/tmp/Miniconda3-${MINICONDA_VERSION}-x86_64.sh"
