@@ -18,13 +18,14 @@ ENV LANG="en_US.UTF-8" LANGUAGE="en_US:en" LC_ALL="en_US.UTF-8"
 ENV MINICONDA_PATH="/opt/miniconda" CONDA_DEFAULT_ENV="default"
 RUN /opt/docker/install-miniconda.sh
 ENV PATH="$MINICONDA_PATH/envs/$CONDA_DEFAULT_ENV/bin:$MINICONDA_PATH/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+RUN conda install mamba
 RUN conda create -n $CONDA_DEFAULT_ENV python=3.7
 RUN echo "source activate $CONDA_DEFAULT_ENV" >> ~/.bashrc
 RUN hash -r
 
 # install specific tools
 COPY requirements-conda.txt /opt/docker
-RUN /bin/bash -c "set -e; sync; conda install -y --quiet --file /opt/docker/requirements-conda.txt ; conda clean -y --all"
+RUN /bin/bash -c "set -e; sync; mamba install -y --quiet --file /opt/docker/requirements-conda.txt ; conda clean -y --all"
 
 # install tsv converter
 ENV ASYMMETRIK_REPO_COMMIT=af2d184da9da9fcc94c6a4d809210868bb8f3034
