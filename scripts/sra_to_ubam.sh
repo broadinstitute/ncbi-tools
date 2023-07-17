@@ -12,7 +12,7 @@ fi
 SRA_ID="$1"
 OUTFILE="$2"
 
-esearch -db sra -q "${SRA_ID}" | efetch -mode json -json > ${SRA_ID}.json
+esearch -db sra -query "${SRA_ID}" | efetch -mode xml -json > ${SRA_ID}.json
 
 CENTER=`cat ${SRA_ID}.json | jq -r .EXPERIMENT_PACKAGE_SET.EXPERIMENT_PACKAGE.SUBMISSION.center_name`
 PLATFORM=`cat ${SRA_ID}.json | jq -r '.EXPERIMENT_PACKAGE_SET.EXPERIMENT_PACKAGE.EXPERIMENT.PLATFORM | keys[] as $k | "\($k)"'`
