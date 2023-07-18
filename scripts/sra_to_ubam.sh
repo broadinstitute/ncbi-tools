@@ -37,3 +37,5 @@ picard AddOrReplaceReadGroups \
     RGDT="$RUNDATE" \
     RGCN="$CENTER" \
     VALIDATION_STRINGENCY=SILENT
+
+rm ${SRA_ID}.temp.bam
