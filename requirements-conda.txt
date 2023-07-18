@@ -1,5 +1,6 @@
 entrez-direct=16.2
-sra-tools=2.11.0
+sra-tools=3.0.5
 samtools=1.17
 picard-slim=2.27.4
 biopython=1.81
+perl-xml-simple=2.25

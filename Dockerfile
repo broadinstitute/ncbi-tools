@@ -27,6 +27,9 @@ RUN hash -r
 COPY requirements-conda.txt /opt/docker
 RUN /bin/bash -c "set -e; sync; mamba install -n ${CONDA_ENV_NAME} -y --quiet --file /opt/docker/requirements-conda.txt ; conda clean -y --all"
 
+# now that the created conda environment has packages installed, set CONDA_DEFAULT_ENV to "activate" it in non-interactive shells
+ENV CONDA_DEFAULT_ENV="custom-env"
+
 # install tsv converter
 ENV ASYMMETRIK_REPO_COMMIT=af2d184da9da9fcc94c6a4d809210868bb8f3034
 RUN /opt/docker/install-tsv_converter.sh
