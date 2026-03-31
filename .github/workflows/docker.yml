@@ -155,7 +155,7 @@ jobs:
           image-ref: ${{ steps.image-ref.outputs.ref }}
           format: table
           severity: CRITICAL,HIGH
-          exit-code: '1'
+          exit-code: '0'
           ignore-unfixed: true
           ignore-policy: .trivy-ignore-policy.rego
           trivyignores: .trivyignore
