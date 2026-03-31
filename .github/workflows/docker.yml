@@ -110,9 +110,11 @@ jobs:
         with:
           context: .
           platforms: linux/amd64,linux/arm64
-          push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.all-tags.outputs.tags }}
           labels: ${{ steps.meta-ghcr.outputs.labels }}
+          provenance: false
+          sbom: false
+          outputs: type=image,push=${{ github.event_name != 'pull_request' }},oci-mediatypes=false
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
