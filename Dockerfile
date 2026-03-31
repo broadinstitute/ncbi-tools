@@ -1,44 +1,49 @@
-FROM node:lts-buster
+FROM mambaorg/micromamba:2.4.0-ubuntu24.04
 
-LABEL maintainer "Daniel Park <dpark@broadinstitute.org>"
+LABEL maintainer="Daniel Park <dpark@broadinstitute.org>"
 
-# non-interactive session just for build
-ARG DEBIAN_FRONTEND=noninteractive
-
-# install scripts
-COPY install-*.sh /opt/docker/
-
-# System packages, etc
-RUN /opt/docker/install-apt_packages.sh
+# Install system packages needed for the TSV converter build
+USER root
+RUN apt-get update && \
+    apt-get install -y -qq --no-install-recommends \
+        ca-certificates git wget curl locales && \
+    locale-gen en_US.UTF-8 && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+USER $MAMBA_USER
 
 # Set default locale to en_US.UTF-8
 ENV LANG="en_US.UTF-8" LANGUAGE="en_US:en" LC_ALL="en_US.UTF-8"
 
-# install miniconda3 with our default channels and no other packages
-ENV MINICONDA_PATH="/opt/miniconda" CONDA_ENV_NAME="custom-env"
-RUN /opt/docker/install-miniconda.sh
-ENV PATH="$MINICONDA_PATH/envs/$CONDA_ENV_NAME/bin:$MINICONDA_PATH/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-RUN conda create -n $CONDA_ENV_NAME python=3.8
-RUN echo "conda activate $CONDA_ENV_NAME" >> ~/.bashrc
-RUN conda install mamba
-RUN hash -r
+# Install conda dependencies
+COPY --chown=$MAMBA_USER:$MAMBA_USER env.yaml /tmp/env.yaml
+RUN micromamba install -y -n base -f /tmp/env.yaml && \
+    micromamba clean --all --yes
 
-# install specific tools
-COPY requirements-conda.txt /opt/docker
-RUN /bin/bash -c "set -e; sync; mamba install -n ${CONDA_ENV_NAME} -y --quiet --file /opt/docker/requirements-conda.txt ; conda clean -y --all"
+# Enable conda environment activation for subsequent RUN commands
+ARG MAMBA_DOCKERFILE_ACTIVATE=1
 
-# now that the created conda environment has packages installed, set CONDA_DEFAULT_ENV to "activate" it in non-interactive shells
-ENV CONDA_DEFAULT_ENV="custom-env"
+# Add manually to PATH for all the image-users who override our entrypoint
+ENV PATH="/opt/conda/bin:$PATH"
 
-# install tsv converter
+# Install Asymmetrik TSV converter
 ENV ASYMMETRIK_REPO_COMMIT=af2d184da9da9fcc94c6a4d809210868bb8f3034
+COPY --chown=$MAMBA_USER:$MAMBA_USER install-tsv_converter.sh /opt/docker/install-tsv_converter.sh
+USER root
 RUN /opt/docker/install-tsv_converter.sh
+USER $MAMBA_USER
 
-# install scripts
-COPY scripts/* /opt/docker/scripts/
+# Install scripts
+COPY --chown=$MAMBA_USER:$MAMBA_USER scripts/* /opt/docker/scripts/
 
-RUN /bin/bash -c "set -e; echo -n 'esearch version: '; esearch -version"
+# Configure sra-tools to preserve original quality scores (not simplified Q30)
+# See: https://github.com/broadinstitute/ncbi-tools/issues/15
+RUN vdb-config --simplified-quality-scores no
 
-# set up entrypoint
+# Verify key tools are available
+RUN esearch -version && \
+    samtools --version | head -1 && \
+    python --version && \
+    node --version
+
 CMD ["/bin/bash"]
-
