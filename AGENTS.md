@@ -99,9 +99,11 @@ The workflow builds and pushes multi-architecture Docker images on every push an
 
 ### Container Registry
 
-The workflow defaults to GitHub Container Registry (GHCR) using the built-in `GITHUB_TOKEN`. It can be reconfigured to push to an alternative registry (e.g., quay.io) by setting repository variables and secrets:
-- Variables: `REGISTRY`, `IMAGE_NAME`
+The workflow always pushes to GitHub Container Registry (GHCR) using the built-in `GITHUB_TOKEN`. It can optionally also push to a second registry (e.g., quay.io) by setting repository variables and secrets:
+- Variables: `REGISTRY` (e.g., `quay.io`), `IMAGE_NAME` (e.g., `broadinstitute/ncbi-tools`)
 - Secrets: `REGISTRY_USERNAME`, `REGISTRY_PASSWORD`
+
+When configured, every push produces tags in both registries simultaneously.
 
 ### Trivy Scanning
 

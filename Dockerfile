@@ -6,7 +6,8 @@ LABEL maintainer="Daniel Park <dpark@broadinstitute.org>"
 USER root
 RUN apt-get update && \
     apt-get install -y -qq --no-install-recommends \
-        ca-certificates git wget curl locales && \
+        ca-certificates git wget curl locales \
+        build-essential python3-dev && \
     locale-gen en_US.UTF-8 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
