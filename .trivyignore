@@ -1,0 +1,7 @@
+# Trivy CVE ignore list for ncbi-tools
+#
+# Add individual CVE IDs here with justifications.
+# Use .trivy-ignore-policy.rego for class-level architectural filtering.
+#
+# Format:
+#   CVE-YYYY-NNNNN   # justification

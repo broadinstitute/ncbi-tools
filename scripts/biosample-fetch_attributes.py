@@ -9,7 +9,8 @@ import Bio.Entrez
 import subprocess
 
 
-def biosample_lookup(accessions, max_results=10000):
+def biosample_lookup(accessions, email, max_results=10000):
+    Bio.Entrez.email = email
 
     # get list of primary db IDs
     primary_ids = Bio.Entrez.read(Bio.Entrez.esearch('biosample',
@@ -76,7 +77,7 @@ def biosample_lookup(accessions, max_results=10000):
 def main(args):
 
     # fetch biosample info
-    biosamples = biosample_lookup(args.accessions, max_results=args.max_results)
+    biosamples = biosample_lookup(args.accessions, args.email, max_results=args.max_results)
 
     # get full list of headers/keys and harmonize across all entries
     _required_keys = ('accession', 'message', 'sample_name', 'isolate',
@@ -108,6 +109,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Retrieve NCBI BioSample metadata')
     parser.add_argument('accessions', nargs='+', help='BioSample accession list')
     parser.add_argument('out_basename', help='output basename for tsv and json output files')
+    parser.add_argument('--email', required=True, help='email address for NCBI Entrez API (required by NCBI)')
     parser.add_argument('--max_results', type=int, default=10000, help='max results per query (no more than 100000). default: %(default)s')
     args = parser.parse_args()
     main(args)

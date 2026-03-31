@@ -6,7 +6,7 @@ task Fetch_SRA_to_BAM {
         String  SRA_ID
 
         Int?    machine_mem_gb
-        String  docker = "quay.io/broadinstitute/ncbi-tools"
+        String  docker = "ghcr.io/broadinstitute/ncbi-tools"
     }
 
     command {
