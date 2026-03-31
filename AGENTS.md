@@ -146,6 +146,21 @@ sam-dump --unaligned SRR_ACCESSION | head -1000 | awk '{print $11}' | sort -u
 # Should show varied quality strings, NOT all identical Q30
 ```
 
+### Running tests
+
+Tests run inside the Docker container (they require the converter and Node.js):
+
+```bash
+# Build the image first
+docker build -t ncbi-tools .
+
+# Run tests
+docker run --rm -v $(pwd)/tests:/work/tests ncbi-tools \
+    bash -c "cd /work && python -m pytest tests/ -v"
+```
+
+Tests are also run automatically in CI after each Docker build.
+
 ### Building locally
 
 ```bash

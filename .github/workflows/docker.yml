@@ -116,6 +116,41 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+  # Run tests inside the built Docker image
+  test:
+    needs: build
+    if: github.event_name != 'schedule' && github.event_name != 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Login to GHCR
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Determine image ref
+        id: image-ref
+        run: |
+          echo "ref=${{ needs.build.outputs.image-tag }}" >> "$GITHUB_OUTPUT"
+
+      - name: Pull image
+        run: docker pull ${{ steps.image-ref.outputs.ref }}
+
+      - name: Run pytest inside container
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}/tests:/work/tests" \
+            ${{ steps.image-ref.outputs.ref }} \
+            bash -c "cd /work && python -m pytest tests/ -v --tb=short"
+
   # Scan the pushed image for vulnerabilities
   scan:
     needs: build
