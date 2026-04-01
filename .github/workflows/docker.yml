@@ -139,9 +139,18 @@ jobs:
       - name: Determine image ref
         id: image-ref
         run: |
-          echo "ref=${{ needs.build.outputs.image-tag }}" >> "$GITHUB_OUTPUT"
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "ref=ncbi-tools:test" >> "$GITHUB_OUTPUT"
+          else
+            echo "ref=${{ needs.build.outputs.image-tag }}" >> "$GITHUB_OUTPUT"
+          fi
 
-      - name: Pull image
+      - name: Build local image (PRs only)
+        if: github.event_name == 'pull_request'
+        run: docker build -t ${{ steps.image-ref.outputs.ref }} .
+
+      - name: Pull image (push only)
+        if: github.event_name != 'pull_request'
         run: docker pull ${{ steps.image-ref.outputs.ref }}
 
       - name: Run pytest inside container
