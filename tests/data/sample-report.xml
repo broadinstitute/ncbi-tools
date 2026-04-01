@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SubmissionStatus status="processed-ok" submission_id="SUB123">
+    <Action action_id="SUB123-ABC123" target_db="BioSample" status="processed-ok">
+        <Response status="processed-ok" error_source="data">
+            <Message severity="info">Successfully loaded</Message>
+            <Object target_db="BioSample" object_id="45678" status="new" last_update="2014-05-05T22:29:22.440" accession="SAMN0000000" spuid="ABC123" spuid_namespace="Institute Name">
+                <Meta>
+                    <Organism taxid="1281071">USA/MA-MGH-03863/2020</Organism>
+                    <Strain>HVH 138 (4-6066704)</Strain>
+                    <BioProjectID>186165</BioProjectID>
+                    <Status>live</Status>
+                </Meta>
+            </Object>
+        </Response>
+    </Action>
+    <Action action_id="SUB123-ABC123" target_db="BioSample" status="processed-ok">
+        <Response status="processed-ok" error_source="data">
+            <Message severity="info">Successfully loaded</Message>
+            <Object target_db="BioSample" object_id="45678" status="new" last_update="2014-05-05T22:29:22.440" accession="SAMN0001234" spuid="ABC123" spuid_namespace="Institute Name">
+                <Meta>
+                    <Organism taxid="1281071">USA/MA-MGH-03864/2020</Organism>
+                    <Strain>HVH 138 (4-6066704)</Strain>
+                    <BioProjectID>186165</BioProjectID>
+                    <Status>live</Status>
+                </Meta>
+            </Object>
+        </Response>
+    </Action>
+</SubmissionStatus>
