@@ -31,7 +31,8 @@ ENV PATH="/opt/conda/bin:$PATH"
 ENV ASYMMETRIK_REPO_COMMIT=af2d184da9da9fcc94c6a4d809210868bb8f3034
 COPY --chown=$MAMBA_USER:$MAMBA_USER install-tsv_converter.sh /opt/docker/install-tsv_converter.sh
 USER root
-RUN /opt/docker/install-tsv_converter.sh
+RUN /opt/docker/install-tsv_converter.sh && \
+    chown -R $MAMBA_USER:$MAMBA_USER /opt/converter
 USER $MAMBA_USER
 
 # Install scripts
