@@ -1,6 +1,7 @@
 # ncbi-tools
 
 [![Build and Push Docker Image](https://github.com/broadinstitute/ncbi-tools/actions/workflows/docker.yml/badge.svg)](https://github.com/broadinstitute/ncbi-tools/actions/workflows/docker.yml)
+[![Quay.io](https://img.shields.io/badge/quay.io-ncbi--tools-blue)](https://quay.io/repository/broadinstitute/ncbi-tools?tab=tags&tag=latest)
 
 Docker image packaging NCBI bioinformatics tools for retrieving sequence data, metadata, and converting between formats. Designed for use as a runtime container in WDL/Cromwell genomics pipelines on platforms like Terra.
 
