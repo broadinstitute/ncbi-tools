@@ -2,7 +2,7 @@
 <!-- $Id$ -->
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:com="SP.common" version="2.0">
-  <xs:import schemaLocation="./xsds/Common.xsd" namespace="SP.common"/>
+  <xs:import schemaLocation="./Common.xsd" namespace="SP.common"/>
 
   <!-- BioSample object -->
   <xs:element name="BioSample" type="typeBioSample"/>

@@ -24,9 +24,30 @@ from pathlib import Path
 from xml.etree import ElementTree as ET
 
 import pytest
+from lxml import etree as LET
 
 CONVERTER_DIR = "/opt/converter"
 TEST_DATA_DIR = Path(__file__).parent / "data"
+SUBMISSION_XSD = TEST_DATA_DIR / "xsds" / "Submission.xsd"
+
+# Cache compiled schema across tests
+_SUBMISSION_SCHEMA: LET.XMLSchema | None = None
+
+
+def _get_submission_schema() -> LET.XMLSchema:
+    global _SUBMISSION_SCHEMA
+    if _SUBMISSION_SCHEMA is None:
+        _SUBMISSION_SCHEMA = LET.XMLSchema(LET.parse(str(SUBMISSION_XSD)))
+    return _SUBMISSION_SCHEMA
+
+
+def _validate_submission_xsd(xml_path: Path) -> None:
+    """Validate a converter output file against the NCBI Submission XSD."""
+    schema = _get_submission_schema()
+    doc = LET.parse(str(xml_path))
+    if not schema.validate(doc):
+        errors = "\n".join(str(e) for e in schema.error_log)
+        pytest.fail(f"XSD validation failed for {xml_path}:\n{errors}")
 MINIMAL_CONFIG = {
     "ftpConfig": {
         "host": "fakehost",
@@ -120,6 +141,8 @@ def run_converter(tsv_filename: str, config: dict, extra_args: list[str] | None 
             f"Output XML not found. Files in converter/files/: "
             f"{list(Path(CONVERTER_DIR, 'files').rglob('*.xml'))}"
         )
+
+    _validate_submission_xsd(output_xml)
 
     tree = ET.parse(output_xml)
     return tree.getroot()
